@@ -37,10 +37,11 @@ contract Game {
             
             uint256 tax = pool / 100 * 5;
             uint256 reward = pool - tax;
-            pool = 0;
+            pool = tax;
 
             payable(msg.sender).transfer(reward);
-            payable(owner).transfer(tax);
+            payable(owner).transfer(pool);
+            pool = 0;
             emit GameWon(msg.sender, reward);
         }
     }
