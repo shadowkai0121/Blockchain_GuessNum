@@ -2,6 +2,8 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import "hardhat/console.sol";
+
 contract Game {
     address public owner;
 
@@ -30,8 +32,11 @@ contract Game {
         require(msg.value == 1 ether, "You must send exactly 1 ETH");
         require(_guess > 0 && _guess < 100, "Guess must be between 0 and 99");
 
+        console.log(msg.value);
         pool += msg.value;
-        if (_guess == target) {
+        if (_guess > target) {
+            console.log("Too Large");
+        } else if (_guess == target) {
             require(pool > 0, "No rewards to give");
             isActive = false;
             
@@ -43,6 +48,9 @@ contract Game {
             payable(owner).transfer(pool);
             pool = 0;
             emit GameWon(msg.sender, reward);
+            console.log("Bingo");
+        } else {
+            console.log("Too Small");
         }
     }
 
